@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 	"reflect"
 	"strings"
@@ -11,9 +12,10 @@ import (
 )
 
 type config struct {
-	Domains    []string `mapstructure:"Domains" validate:"required"`
-	Subdomains []string `mapstructure:"Subdomains" validate:"required"`
-	Token      string   `mapstructure:"Token" validate:"required"`
+	Domains    []string `mapstructure:"domains" validate:"required,unique"`
+	Subdomains []string `mapstructure:"subdomains" validate:"required,unique"`
+	Token      string   `mapstructure:"token" validate:"required"`
+	Interval   int      `mapstructure:"repeat"`
 }
 
 // Cfg unparsed string config file
@@ -22,7 +24,7 @@ var Cfg string
 // Config parsed config file
 var Config config
 
-// InitConfig reads in config file and ENV variables if set.
+// InitConfig initialize the config variable
 func InitConfig() {
 	// initialize viper
 	if Cfg != "" {
@@ -33,7 +35,7 @@ func InitConfig() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
-			Log.Fatal(err)
+			Log.WithField("component", "CONFIG").Fatal(err)
 			os.Exit(1)
 		}
 
@@ -59,15 +61,21 @@ func InitConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		Log.WithField("component", "config").Debugln("Using config file:", viper.ConfigFileUsed())
+		Log.WithField("component", "CONFIG").Debugln("Using config file:", viper.ConfigFileUsed())
 	} else {
-		Log.WithField("component", "config").Debugln("Can not find config file at known locations. Trying for environment variables.")
+		Log.WithField("component", "CONFIG").Debugln("Can not find config file at known locations. Trying for environment variables.")
 	}
+}
 
+// LoadConfig reads in config file and ENV variables if set.
+func LoadConfig() {
 	err := viper.Unmarshal(&Config)
 	if err != nil {
-		Log.WithField("component", "config").Fatalln("Unable to decode config file, %v", err)
+		Log.WithField("component", "CONFIG").Fatalln("Unable to decode config file, %v", err)
 	}
+
+	// set default values
+	viper.SetDefault("Repeat", 3600)
 
 	// bind environments and get the config into struct
 	bindEnvs(viper.GetViper(), Config)
@@ -104,12 +112,22 @@ func checkConfig(iface config) {
 	if err != nil {
 
 		if _, ok := err.(*validator.InvalidValidationError); ok {
-			Log.Errorln(err)
+			Log.WithField("component", "CONFIG").Errorln(err)
 			return
 		}
 
 		for _, err := range err.(validator.ValidationErrors) {
-			Log.Errorf("%s field can not be empty and has to be an %s.\n", err.Field(), err.Type())
+			var parsedError string
+
+			if err.ActualTag() == "required" {
+				parsedError = "is required"
+			} else if err.ActualTag() == "unique" {
+				parsedError = "has to be unique"
+			} else {
+				parsedError = fmt.Sprintf("has to be %s", err.ActualTag())
+			}
+
+			Log.WithField("component", "CONFIG").Errorf("%s %s and has to be %s.\n", err.Field(), parsedError, err.Type())
 		}
 
 		os.Exit(127)
