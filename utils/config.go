@@ -46,7 +46,7 @@ func InitConfig() {
 
 		// set config and alternative config paths
 		viper.AddConfigPath(".")
-		viper.AddConfigPath(home)
+		viper.AddConfigPath(fmt.Sprintf("%s/.config/do-dyndns/", home))
 		viper.AddConfigPath("/etc/do-dyndns/")
 
 		// Search config in given directories with name ".do-dyndns" (without extension).

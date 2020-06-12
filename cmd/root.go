@@ -35,6 +35,7 @@ var ipChanged bool
 var rootCmd = &cobra.Command{
 	Use:     "do-dyndns",
 	Short:   "Dynamically set your subdomains IP addresses that utilize Digital Ocean nameservers.",
+	Example: `Please visit url for readme "https://github.com/cenk1cenk2/do-dyndns/blob/master/README.md"`,
 	Version: Version,
 	PreRun:  func(cmd *cobra.Command, args []string) { preRun(cmd, args) },
 	Run:     func(cmd *cobra.Command, args []string) { run(cmd, args) },
@@ -44,7 +45,7 @@ var rootCmd = &cobra.Command{
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		utils.Log.Fatal(err)
+		utils.Log.Fatalln(err)
 		os.Exit(1)
 	}
 }
@@ -192,9 +193,15 @@ func subdomainWorker(wg *sync.WaitGroup, domain string, subdomain string, domain
 
 				if err != nil {
 					utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "FAILED"}).Errorln(err)
+
 				} else {
 					utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "SUCCESS"}).Infoln(res)
+
 				}
+
+			} else {
+				utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "SKIPPED"}).Debugln("No changes required for subodmain:", subdomain)
+
 			}
 		}
 	}
@@ -280,8 +287,8 @@ func getDoDomainRecords(domain string) ([]iDoDomainRecordsAPI, error) {
 	body, err := createAPIRequest("GET",
 		fmt.Sprintf("https://api.digitalocean.com/v2/domains/%s/records", domain),
 		"",
-		requestHeaders{Key: "content-type", Value: "application/json"},
-		requestHeaders{Key: "Authorization", Value: fmt.Sprintf("Bearer %s", utils.Config.Token)},
+		iRequestHeaders{Key: "content-type", Value: "application/json"},
+		iRequestHeaders{Key: "Authorization", Value: fmt.Sprintf("Bearer %s", utils.Config.Token)},
 	)
 
 	if err != nil {
@@ -295,6 +302,10 @@ func getDoDomainRecords(domain string) ([]iDoDomainRecordsAPI, error) {
 		return []iDoDomainRecordsAPI{}, errors.New(fmt.Sprint("Records for the given domain can not be found: ", domain))
 	}
 
+	if apiErr.ID == "Unauthorized" {
+		return []iDoDomainRecordsAPI{}, errors.New(fmt.Sprint("Token does not seem to be valid for domain: ", domain))
+	}
+
 	var value iGetDoDomainRecordsAPIRes
 	json.Unmarshal(body, &value)
 
@@ -305,6 +316,8 @@ func getDoDomainRecords(domain string) ([]iDoDomainRecordsAPI, error) {
 			domainRecords = append(domainRecords, record)
 		}
 	}
+
+	fmt.Println(string(body))
 
 	// check the length of A records
 	if len(domainRecords) == 0 {
@@ -318,8 +331,8 @@ func setDoDomainRecords(domain string, subdomain string, subdomainID int) (strin
 	body, err := createAPIRequest("PUT",
 		fmt.Sprintf("https://api.digitalocean.com/v2/domains/%s/records/%d", domain, subdomainID),
 		fmt.Sprintf(`{"data":"%s"}`, ip),
-		requestHeaders{Key: "content-type", Value: "application/json"},
-		requestHeaders{Key: "Authorization", Value: fmt.Sprintf("Bearer %s", utils.Config.Token)},
+		iRequestHeaders{Key: "content-type", Value: "application/json"},
+		iRequestHeaders{Key: "Authorization", Value: fmt.Sprintf("Bearer %s", utils.Config.Token)},
 	)
 
 	if err != nil {
@@ -333,6 +346,10 @@ func setDoDomainRecords(domain string, subdomain string, subdomainID int) (strin
 		return "", errors.New(fmt.Sprint("Digital Ocean API rejected the record for subdomain:", subdomain))
 	}
 
+	if apiErr.ID == "Unauthorized" {
+		return "", errors.New(fmt.Sprint("Token does not seem to be valid for subdomain: ", subdomain))
+	}
+
 	var value iSetDoDomainRecordsAPIRes
 	json.Unmarshal(body, &value)
 
@@ -344,12 +361,12 @@ func setDoDomainRecords(domain string, subdomain string, subdomainID int) (strin
 	return fmt.Sprintln("Changed DNS record for subdomain:", subdomain), nil
 }
 
-type requestHeaders struct {
+type iRequestHeaders struct {
 	Value string
 	Key   string
 }
 
-func createAPIRequest(method string, url string, data string, headers ...requestHeaders) ([]byte, error) {
+func createAPIRequest(method string, url string, data string, headers ...iRequestHeaders) ([]byte, error) {
 	// initiations
 	var client = &http.Client{}
 
@@ -396,7 +413,7 @@ func init() {
 	fmt.Println("|d|o|-|d|y|n|d|n|s|", fmt.Sprintf("v%s", Version))
 
 	// persistent flags
-	rootCmd.PersistentFlags().StringVar(&utils.Cfg, "config", "", "config file ({.,/etc/do-dyndns/,$HOME}/.do-dyndns.yml)")
+	rootCmd.PersistentFlags().StringVar(&utils.Cfg, "config", "", "config file ({.,/etc/do-dyndns,~/.config/do-dyndns}/.do-dyndns.yml)")
 	rootCmd.PersistentFlags().BoolVar(&utils.LogLevelVerbose, "verbose", false, "Enable verbose logging.")
 
 	// initialize
