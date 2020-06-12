@@ -39,9 +39,9 @@ The configuration file structure is as below:
 
 ```yaml
 domains:
-	- example.com
+  - example.com
 subdomains:
-	- 1.example.com
+  - 1.example.com
 token: DIGITAL_OCEAN_TOKEN
 repeat: 3600 # this is optional and 3600 is the default if you want repeat
 ```
