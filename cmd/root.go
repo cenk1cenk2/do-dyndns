@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -26,9 +27,6 @@ type iflags struct {
 
 var flags iflags
 
-// initiations
-var client = &http.Client{}
-
 // variables
 var ip string
 var ipChanged bool
@@ -38,10 +36,8 @@ var rootCmd = &cobra.Command{
 	Use:     "do-dyndns",
 	Short:   "Dynamically set your subdomains IP addresses that utilize Digital Ocean nameservers.",
 	Version: Version,
-	PreRun: func(cmd *cobra.Command, args []string) {
-		preRun(cmd, args)
-	},
-	Run: func(cmd *cobra.Command, args []string) { run(cmd, args) },
+	PreRun:  func(cmd *cobra.Command, args []string) { preRun(cmd, args) },
+	Run:     func(cmd *cobra.Command, args []string) { run(cmd, args) },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -94,9 +90,9 @@ func domainWorker() {
 
 	// initialize variables
 	var domainsProcessed []string
+	var domainsProcessedMutex = &sync.Mutex{}
 	var subdomainsProcessed []string
-
-	// initiate workers
+	var subdomainsProcessedMutex = &sync.Mutex{}
 
 	// create work group
 	for _, domain := range utils.Config.Domains {
@@ -133,7 +129,7 @@ func domainWorker() {
 				if matched {
 					subdomainWG.Add(1)
 
-					go subdomainWorker(&subdomainWG, domain, subdomain, domainRecords, subdomainsProcessed)
+					go subdomainWorker(&subdomainWG, domain, subdomain, domainRecords, &subdomainsProcessed, subdomainsProcessedMutex)
 				}
 
 			}
@@ -141,14 +137,17 @@ func domainWorker() {
 			utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "FINISHED"}).Debugln("Worker of domain:", domain)
 
 			subdomainWG.Wait()
+
+			domainsProcessedMutex.Lock()
 			domainsProcessed = append(domainsProcessed, domain)
+			domainsProcessedMutex.Unlock()
 		}(domain)
 	}
 
 	wg.Wait()
 	// print out errors
-	notProcessedDomains := getMissing(utils.Config.Domains, domainsProcessed)
-	notProcessedSubdomains := getMissing(utils.Config.Subdomains, subdomainsProcessed)
+	notProcessedDomains := getMissingSlice(utils.Config.Domains, domainsProcessed)
+	notProcessedSubdomains := getMissingSlice(utils.Config.Subdomains, subdomainsProcessed)
 
 	if len(notProcessedDomains) > 0 {
 		utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "FAILED"}).Errorf("Failed for domains: %s", strings.Join(notProcessedDomains, ", "))
@@ -160,7 +159,7 @@ func domainWorker() {
 
 }
 
-func subdomainWorker(wg *sync.WaitGroup, domain string, subdomain string, domainRecords doDomainRecords, subdomainsProcessed []string) {
+func subdomainWorker(wg *sync.WaitGroup, domain string, subdomain string, domainRecords []iDoDomainRecordsAPI, subdomainsProcessed *[]string, subdomainsProcessedMutex *sync.Mutex) {
 	defer wg.Done()
 
 	utils.Log.WithField("component", "DOMAIN").Debugf("Matched domain %s with subdomain %s\n", domain, subdomain)
@@ -189,7 +188,13 @@ func subdomainWorker(wg *sync.WaitGroup, domain string, subdomain string, domain
 				utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "STARTED"}).Debugln("Worker of subdomain:", domain)
 				utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "CHANGE"}).Warningf(`Subdomain "%s" has different record of %s`, subdomain, record.Data)
 
-				// send this to subdomain queue
+				res, err := setDoDomainRecords(domain, subdomain, record.ID)
+
+				if err != nil {
+					utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "FAILED"}).Errorln(err)
+				} else {
+					utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "SUCCESS"}).Infoln(res)
+				}
 			}
 		}
 	}
@@ -198,7 +203,9 @@ func subdomainWorker(wg *sync.WaitGroup, domain string, subdomain string, domain
 		utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "SKIPPED"}).Errorf(`Subdomain "%s" does not have a "A" record`, subdomain)
 
 	} else {
-		subdomainsProcessed = append(subdomainsProcessed, subdomain)
+		subdomainsProcessedMutex.Lock()
+		*subdomainsProcessed = append(*subdomainsProcessed, subdomain)
+		subdomainsProcessedMutex.Unlock()
 
 	}
 }
@@ -206,20 +213,15 @@ func subdomainWorker(wg *sync.WaitGroup, domain string, subdomain string, domain
 func getIP() {
 	utils.Log.WithFields(log.Fields{"component": "IP", "action": "START"}).Infoln("Fetching the IP address from the API")
 
-	// create request
-	req, _ := http.NewRequest("GET", "https://api.ipify.org", nil)
-	resp, err := client.Do(req)
-	if err != nil {
-		utils.Log.WithFields(log.Fields{"component": "IP", "action": "CHECK"}).Warnf("Can not create request to the API server. %s\n", err)
+	body, err := createAPIRequest("GET",
+		"https://api.ipify.org",
+		"",
+	)
 
-	}
-
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		utils.Log.WithFields(log.Fields{"component": "IP", "action": "CHECK"}).Warnf("Can not connect to the API server. %s\n", err)
+		utils.Log.WithFields(log.Fields{"component": "IP", "action": "CHECK"}).Warnln(err)
+
 		ipChanged = false
-
 	} else {
 		// check ip address
 		query := string(body)
@@ -242,8 +244,8 @@ func getIP() {
 
 }
 
-type doAPIResponse struct {
-	DomainRecords doDomainRecords `json:"domain_records"`
+type iGetDoDomainRecordsAPIRes struct {
+	DomainRecords []iDoDomainRecordsAPI `json:"domain_records"`
 	Links         struct {
 	} `json:"links"`
 	Meta struct {
@@ -251,7 +253,17 @@ type doAPIResponse struct {
 	} `json:"meta"`
 }
 
-type doDomainRecords []struct {
+type iDoAPIErr struct {
+	ID        string `json:"id"`
+	Message   string `json:"message"`
+	RequestID string `json:"request_id"`
+}
+
+type iSetDoDomainRecordsAPIRes struct {
+	DomainRecord iDoDomainRecordsAPI `json:"domain_record"`
+}
+
+type iDoDomainRecordsAPI struct {
 	ID       int         `json:"id"`
 	Type     string      `json:"type"`
 	Name     string      `json:"name"`
@@ -264,43 +276,30 @@ type doDomainRecords []struct {
 	Tag      interface{} `json:"tag"`
 }
 
-type doAPIErr struct {
-	ID        string `json:"id"`
-	Message   string `json:"message"`
-	RequestID string `json:"request_id"`
-}
+func getDoDomainRecords(domain string) ([]iDoDomainRecordsAPI, error) {
+	body, err := createAPIRequest("GET",
+		fmt.Sprintf("https://api.digitalocean.com/v2/domains/%s/records", domain),
+		"",
+		requestHeaders{Key: "content-type", Value: "application/json"},
+		requestHeaders{Key: "Authorization", Value: fmt.Sprintf("Bearer %s", utils.Config.Token)},
+	)
 
-func getDoDomainRecords(domain string) (doDomainRecords, error) {
-	// create request
-	req, _ := http.NewRequest("GET", fmt.Sprintf("https://api.digitalocean.com/v2/domains/%s/records", domain), nil)
-	req.Header.Add("User-Agent", "do-dyndns")
-	req.Header.Add("content-type", "application/json")
-	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", utils.Config.Token))
-	resp, err := client.Do(req)
 	if err != nil {
-		utils.Log.WithFields(log.Fields{"component": "DO", "action": "CHECK"}).Warnf("Can not create request to the API server. %s\n", err)
-
+		return []iDoDomainRecordsAPI{}, err
 	}
 
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		utils.Log.WithFields(log.Fields{"component": "IP", "action": "CHECK"}).Warnf("Can not connect to the API server. %s\n", err)
-
-	}
-
-	var apiErr doAPIErr
+	var apiErr iDoAPIErr
 	json.Unmarshal(body, &apiErr)
 
 	if apiErr.ID == "not_found" {
-		return doDomainRecords{}, errors.New(fmt.Sprint("Records for the given domain can not be found: ", domain))
+		return []iDoDomainRecordsAPI{}, errors.New(fmt.Sprint("Records for the given domain can not be found: ", domain))
 	}
 
-	var value doAPIResponse
+	var value iGetDoDomainRecordsAPIRes
 	json.Unmarshal(body, &value)
 
 	// clean up records, only include A
-	var domainRecords doDomainRecords
+	var domainRecords []iDoDomainRecordsAPI
 	for _, record := range value.DomainRecords {
 		if record.Type == "A" {
 			domainRecords = append(domainRecords, record)
@@ -309,13 +308,77 @@ func getDoDomainRecords(domain string) (doDomainRecords, error) {
 
 	// check the length of A records
 	if len(domainRecords) == 0 {
-		return doDomainRecords{}, errors.New(fmt.Sprint("No A Records for given domain has been found: ", domain))
+		return []iDoDomainRecordsAPI{}, errors.New(fmt.Sprint("No A Records for given domain has been found: ", domain))
 	}
 
 	return domainRecords, nil
 }
 
-func getMissing(a, b []string) []string {
+func setDoDomainRecords(domain string, subdomain string, subdomainID int) (string, error) {
+	body, err := createAPIRequest("PUT",
+		fmt.Sprintf("https://api.digitalocean.com/v2/domains/%s/records/%d", domain, subdomainID),
+		fmt.Sprintf(`{"data":"%s"}`, ip),
+		requestHeaders{Key: "content-type", Value: "application/json"},
+		requestHeaders{Key: "Authorization", Value: fmt.Sprintf("Bearer %s", utils.Config.Token)},
+	)
+
+	if err != nil {
+		return "", err
+	}
+
+	var apiErr iDoAPIErr
+	json.Unmarshal(body, &apiErr)
+
+	if apiErr.ID == "not_found" {
+		return "", errors.New(fmt.Sprint("Digital Ocean API rejected the record for subdomain:", subdomain))
+	}
+
+	var value iSetDoDomainRecordsAPIRes
+	json.Unmarshal(body, &value)
+
+	var record = value.DomainRecord
+	if record.Data != ip {
+		return "", errors.New(fmt.Sprint("Digital Ocean API failed to set the record for subdomain:", subdomain))
+	}
+
+	return fmt.Sprintln("Changed DNS record for subdomain:", subdomain), nil
+}
+
+type requestHeaders struct {
+	Value string
+	Key   string
+}
+
+func createAPIRequest(method string, url string, data string, headers ...requestHeaders) ([]byte, error) {
+	// initiations
+	var client = &http.Client{}
+
+	// create request
+	req, _ := http.NewRequest(method, url, bytes.NewBuffer([]byte(data)))
+	req.Header.Add("User-Agent", "do-dyndns")
+
+	for _, header := range headers {
+		req.Header.Add(header.Key, header.Value)
+	}
+
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return nil, errors.New(fmt.Sprint("Can not connect to the API server.", err))
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if err != nil {
+		return nil, errors.New(fmt.Sprint("Can not decode the API response.", err))
+	}
+
+	return body, nil
+}
+
+func getMissingSlice(a, b []string) []string {
 	mb := make(map[string]struct{}, len(b))
 	for _, x := range b {
 		mb[x] = struct{}{}
