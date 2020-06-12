@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"sync"
 	"time"
 
@@ -94,12 +95,15 @@ func domainWorker(end chan bool) {
 	// create worker queue for subdomains
 	var wg sync.WaitGroup
 
+	// initialize variables
+	var domainsProcessed []string
+	var subdomainsProcessed []string
+
 	// initiate workers
 	for w := 0; w < numJobs; w++ {
 
 		go func() {
 			// create work group
-
 			for domain := range jobs {
 
 				// check if valid domain
@@ -118,7 +122,7 @@ func domainWorker(end chan bool) {
 				if err != nil {
 					utils.Log.WithFields(log.Fields{"component": "DO", "action": "CHECK"}).Errorln(err)
 
-					results <- domain
+					results <- ""
 					return
 				}
 
@@ -131,23 +135,24 @@ func domainWorker(end chan bool) {
 					if matched {
 						utils.Log.WithField("component", "DOMAIN").Debugf("Matched domain %s with subdomain %s\n", domain, subdomain)
 
+						var parsedSubdomain string
 						// strip subdomain to bare
 						if subdomain == domain {
 							// subdomain is the root domain
-							subdomain = "@"
+							parsedSubdomain = "@"
 						} else {
 							// subdomain is a real subdomain
 							re := *regexp.MustCompile(`^(.*)\.[^.]*\.[^.]*$`)
-							subdomain = re.FindStringSubmatch(subdomain)[1]
+							parsedSubdomain = re.FindStringSubmatch(subdomain)[1]
 						}
 
 						// the case where you want to change the base domain name directly
 						var recordFound bool
 						for _, record := range domainRecords {
-							if record.Name == subdomain {
+							if record.Name == parsedSubdomain {
 								recordFound = true
 								if record.Data != ip {
-									utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "CHANGE"}).Warningf(`Subdomain "%s.%s" has different record of %s`, subdomain, domain, record.Data)
+									utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "CHANGE"}).Warningf(`Subdomain "%s" has different record of %s`, subdomain, record.Data)
 
 									// send this to subdomain queue
 									wg.Add(1)
@@ -157,16 +162,23 @@ func domainWorker(end chan bool) {
 						}
 
 						if !recordFound {
-							utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN"}).Warningf(`Subdomain "%s.%s" does not have a "A" record`, subdomain, domain)
+							utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "SKIPPED"}).Errorf(`Subdomain "%s" does not have a "A" record`, subdomain)
+
+						} else {
+							subdomainsProcessed = append(subdomainsProcessed, subdomain)
+
 						}
 
 					}
 
+					tempWG.Done()
 				}
-				tempWG.Done()
+
+				tempWG.Wait()
 
 				utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "FINISHED"}).Debugln("Worker of domain:", domain)
 
+				domainsProcessed = append(domainsProcessed, domain)
 				results <- domain
 			}
 		}()
@@ -181,6 +193,18 @@ func domainWorker(end chan bool) {
 	// wait for them to finish
 	for a := 0; a < numJobs; a++ {
 		<-results
+	}
+
+	// print out errors
+	notProcessedDomains := getMissing(utils.Config.Domains, domainsProcessed)
+	notProcessedSubdomains := getMissing(utils.Config.Subdomains, subdomainsProcessed)
+
+	if len(notProcessedDomains) > 0 {
+		utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "FAILED"}).Errorf("Failed for domains: %s", strings.Join(notProcessedDomains, ", "))
+	}
+
+	if len(notProcessedSubdomains) > 0 {
+		utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "FAILED"}).Errorf("Failed for subdomains: %s", strings.Join(notProcessedSubdomains, ", "))
 	}
 
 	// end run
@@ -305,6 +329,20 @@ func getDoDomainRecords(domain string) (doDomainRecords, error) {
 	}
 
 	return domainRecords, nil
+}
+
+func getMissing(a, b []string) []string {
+	mb := make(map[string]struct{}, len(b))
+	for _, x := range b {
+		mb[x] = struct{}{}
+	}
+	var diff []string
+	for _, x := range a {
+		if _, found := mb[x]; !found {
+			diff = append(diff, x)
+		}
+	}
+	return diff
 }
 
 func init() {
