@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/cenk1cenk2/do-dyndns/compare/v1.0.2...v1.0.3) (2020-06-15)
+
+
+### Bug Fixes
+
+* **build:** fix build setup ([38c8a65](https://github.com/cenk1cenk2/do-dyndns/commit/38c8a654d25886e0becd25dbabf3acdf87b871e8))
+
 ## [1.0.2](https://github.com/cenk1cenk2/do-dyndns/compare/v1.0.1...v1.0.2) (2020-06-15)
 
 
