@@ -29,7 +29,7 @@ module.exports = {
     "@semantic-release/changelog",
     [
       "@semantic-release/exec", {
-        "publishCmd": "echo 'latest,${nextRelease.version}' > .tags"
+        "prepare": "echo 'latest,${nextRelease.version}' > .tags"
       }
     ],
     [
