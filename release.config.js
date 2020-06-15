@@ -29,7 +29,7 @@ module.exports = {
     "@semantic-release/changelog",
     [
       "@semantic-release/exec", {
-        "generateNotes": "printf 'latest,${nextRelease.version}' > /drone/src/.tags",
+        "generateNotesCmd": "printf 'latest,${nextRelease.version}' > /drone/src/.tags",
       }
     ],
     [
