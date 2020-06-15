@@ -19,7 +19,7 @@ import (
 )
 
 // Version get current version of application
-var Version string = "1.0.13"
+var Version string = "1.0.14"
 
 type iflags struct {
 	once *bool
