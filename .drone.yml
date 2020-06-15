@@ -11,6 +11,7 @@ steps:
   - name: build
     image: golang:alpine
     commands:
+      - apk add --no-cache --no-progress
       - make build
 
   - name: semantic-release
