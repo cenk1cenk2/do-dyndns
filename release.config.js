@@ -14,8 +14,8 @@ module.exports = {
       {
         "replacements": [{
           "files": ["cmd/root.go"],
-          "from": "__VERSION__ = \".*\"",
-          "to": "__VERSION__ = \"${nextRelease.version}\"",
+          "from": "var Version string = \".*\"",
+          "to": "var Version string = \"${nextRelease.version}\"",
           "results": [{
             "file": "cmd/root.go",
             "hasChanged": true,
@@ -25,19 +25,39 @@ module.exports = {
           "countMatches": true
         }]
       }
-    ]
-  ],
-  "prepare": [
+    ],
+    ["@semantic-release/github", {
+      "assets": [{
+        "path": "dist/do-dyndns-linux-x64",
+        "label": "do-dyndns-linux-x64 <%= nextRelease.version %>"
+      }]
+    }],
     "@semantic-release/changelog",
-    {
-      "path": "@semantic-release/git",
-      "assets": [
-        "CHANGELOG.md",
-        process.env.README_LOCATION ? process.env.README_LOCATION : 'README.md',
-        "yarn.lock",
-        "npm-shrinkwrap.json"
-      ],
-      "message": "chore(release): <%= nextRelease.version %> - <%= new Date().toISOString().slice(0,10).replace(/-/g,'') %> [skip ci]\n\n<%= nextRelease.notes %>"
-    }
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md",
+          process.env.README_LOCATION ? process.env.README_LOCATION : 'README.md',
+          "yarn.lock",
+          "npm-shrinkwrap.json",
+          "cmd/root.go"
+        ],
+        "message": "chore(release): <%= nextRelease.version %> - <%= new Date().toISOString().slice(0,10).replace(/-/g,'') %> [skip ci]\n\n<%= nextRelease.notes %>"
+      }
+    ],
+    [
+      "@semantic-release/github", {
+        "assets": [{
+          "path": "dist/do-dyndns-linux-x64",
+          "label": "do-dyndns-linux-x64 <%= nextRelease.version %>"
+        }, ]
+      }
+    ],
+    [
+      "@semantic-release/exec", {
+        "publishCmd": "echo 'latest,${nextRelease.version}' > .tags"
+      }
+    ]
   ]
 }
