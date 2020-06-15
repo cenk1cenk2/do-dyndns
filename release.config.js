@@ -29,13 +29,15 @@ module.exports = {
     "@semantic-release/changelog",
     [
       "@semantic-release/exec", {
-        "prepare": "echo 'latest,${nextRelease.version}' > .tags"
+        "generateNotes": "echo 'latest,${nextRelease.version}' > .tags",
+        "publish": "echo \"Next version should be: $(cat .tags)\" && pwd"
       }
     ],
     [
       "@semantic-release/git",
       {
         "assets": [
+          ".tags",
           "cmd/root.go",
           "CHANGELOG.md",
           process.env.README_LOCATION ? process.env.README_LOCATION : 'README.md',
@@ -49,7 +51,7 @@ module.exports = {
       "@semantic-release/github", {
         "assets": [{
           "path": "dist/do-dyndns-linux-x64",
-          "label": "do-dyndns-linux-x64 v<%= nextRelease.version %>"
+          "label": "do-dyndns-linux-x64_v<%= nextRelease.version %>"
         }]
       }
     ]
