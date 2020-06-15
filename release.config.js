@@ -6,9 +6,6 @@ module.exports = {
     "@semantic-release/changelog",
     "@semantic-release/git"
   ],
-  "prepare": [
-    "@semantic-release/changelog"
-  ],
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
@@ -31,9 +28,15 @@ module.exports = {
     ],
     "@semantic-release/changelog",
     [
+      "@semantic-release/exec", {
+        "publishCmd": "echo 'latest,${nextRelease.version}' > .tags"
+      }
+    ],
+    [
       "@semantic-release/git",
       {
         "assets": [
+          ".tags",
           "CHANGELOG.md",
           process.env.README_LOCATION ? process.env.README_LOCATION : 'README.md',
           "yarn.lock",
@@ -47,12 +50,7 @@ module.exports = {
         "assets": [{
           "path": "dist/do-dyndns-linux-x64",
           "label": "do-dyndns-linux-x64 v<%= nextRelease.version %>"
-        }, ]
-      }
-    ],
-    [
-      "@semantic-release/exec", {
-        "publishCmd": "echo 'latest,${nextRelease.version}' > .tags"
+        }]
       }
     ]
   ]
