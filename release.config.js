@@ -29,8 +29,7 @@ module.exports = {
     "@semantic-release/changelog",
     [
       "@semantic-release/exec", {
-        "generateNotes": "echo 'latest,${nextRelease.version}' > .tags",
-        "publish": "echo \"Next version should be: $(cat .tags)\" && pwd"
+        "generateNotes": "echo 'latest,${nextRelease.version}' > /drone/src/.tags",
       }
     ],
     [

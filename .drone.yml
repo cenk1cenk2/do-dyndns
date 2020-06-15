@@ -13,6 +13,11 @@ steps:
     commands:
       - apk add --no-cache --no-progress make
       - make build
+    when:
+      event:
+        - push
+      branch:
+        - master
 
   - name: semantic-release
     image: cenk1cenk2/drone-semantic-release
@@ -40,9 +45,6 @@ steps:
 
   - name: publish
     image: plugins/docker
-    commands:
-      - ls
-      - cat .tags
     settings:
       repo: cenk1cenk2/do-dyndns
       username:
