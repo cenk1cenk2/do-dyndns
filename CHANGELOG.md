@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/cenk1cenk2/do-dyndns/compare/v1.0.7...v1.0.8) (2020-06-15)
+
+
+### Bug Fixes
+
+* **build:** stream line still ([712cdaa](https://github.com/cenk1cenk2/do-dyndns/commit/712cdaa873290014d81598867e69052406578711))
+
 ## [1.0.7](https://github.com/cenk1cenk2/do-dyndns/compare/v1.0.6...v1.0.7) (2020-06-15)
 
 
