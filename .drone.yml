@@ -3,7 +3,6 @@ kind: pipeline
 trigger:
   event:
     - push
-    - tag
   branch:
     - master
 
@@ -45,10 +44,6 @@ steps:
 
   - name: publish
     image: plugins/docker
-    commands:
-      - ls
-      - pwd
-      - cat .tags
     settings:
       repo: cenk1cenk2/do-dyndns
       username:
