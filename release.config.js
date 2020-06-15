@@ -36,7 +36,6 @@ module.exports = {
       "@semantic-release/git",
       {
         "assets": [
-          ".tags",
           "cmd/root.go",
           "CHANGELOG.md",
           process.env.README_LOCATION ? process.env.README_LOCATION : 'README.md',
