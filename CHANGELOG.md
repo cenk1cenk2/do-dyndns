@@ -1,3 +1,10 @@
+## [1.0.15](https://github.com/cenk1cenk2/do-dyndns/compare/v1.0.14...v1.0.15) (2020-06-19)
+
+
+### Bug Fixes
+
+* **logger:** fix debug output ([e433ac4](https://github.com/cenk1cenk2/do-dyndns/commit/e433ac407fb0e586664caa82dc5bcc66c2c43b6e))
+
 ## [1.0.14](https://github.com/cenk1cenk2/do-dyndns/compare/v1.0.13...v1.0.14) (2020-06-15)
 
 
