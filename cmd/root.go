@@ -317,8 +317,6 @@ func getDoDomainRecords(domain string) ([]iDoDomainRecordsAPI, error) {
 		}
 	}
 
-	fmt.Println(string(body))
-
 	// check the length of A records
 	if len(domainRecords) == 0 {
 		return []iDoDomainRecordsAPI{}, errors.New(fmt.Sprint("No A Records for given domain has been found: ", domain))
