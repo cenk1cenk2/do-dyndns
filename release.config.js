@@ -47,18 +47,20 @@ module.exports = {
     ],
     [
       "@semantic-release/github", {
-        "assets": [{
-          "path": "dist/do-dyndns-linux-x64",
-          "label": "do-dyndns-linux-x64_v<%= nextRelease.version %>"
-        },
-        {
-          "path": "dist/do-dyndns-linux-arm",
-          "label": "do-dyndns-linux-arm_v<%= nextRelease.version %>"
-        },
-        {
-          "path": "dist/do-dyndns-linux-arm64",
-          "label": "do-dyndns-linux-arm64_v<%= nextRelease.version %>"
-        }]
+        "assets": [
+          {
+            "path": "dist/do-dyndns-linux-x64",
+            "label": "do-dyndns-linux-x64_v<%= nextRelease.version %>"
+          },
+          {
+            "path": "dist/do-dyndns-linux-arm",
+            "label": "do-dyndns-linux-arm_v<%= nextRelease.version %>"
+          },
+          {
+            "path": "dist/do-dyndns-linux-arm64",
+            "label": "do-dyndns-linux-arm64_v<%= nextRelease.version %>"
+          }
+        ]
       }
     ]
   ]
