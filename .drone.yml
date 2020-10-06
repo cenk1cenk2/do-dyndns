@@ -53,7 +53,6 @@ steps:
       password:
         from_secret: docker_password
       build_args:
-        - IMAGE_NAME=alpine:latest
         - BINARY_NAME=linux-x64
     depends_on:
       - semantic-release
@@ -72,7 +71,6 @@ steps:
       password:
         from_secret: docker_password
       build_args:
-        - IMAGE_NAME=arm32v7/alpine
         - BINARY_NAME=linux-arm
       tags:
         - arm
@@ -93,7 +91,6 @@ steps:
       password:
         from_secret: docker_password
       build_args:
-        - IMAGE_NAME=arm64v8/alpine
         - BINARY_NAME=linux-arm64
       tags:
         - arm64
