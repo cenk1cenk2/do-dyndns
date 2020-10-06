@@ -72,7 +72,8 @@ steps:
         from_secret: docker_password
       build_args:
         - BINARY_NAME=linux-arm
-      default_suffix: arm
+      tags:
+        - arm
     depends_on:
       - semantic-release
     when:
@@ -91,7 +92,8 @@ steps:
         from_secret: docker_password
       build_args:
         - BINARY_NAME=linux-arm64
-      default_suffix: arm64
+      tags:
+        - arm64
     depends_on:
       - semantic-release
     when:
@@ -103,18 +105,14 @@ steps:
   - name: manifest
     image: plugins/manifest
     settings:
-      ignore_missing: true
-      spec: .docker-manifest.tmpl
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
-    depends_on:
-      - publish-arm
-      - publish-arm64
-    when:
-      event:
-        - push
-      branch:
-        - master
+      target: cenk1cenk2/do-dyndns
+      template: cenk1cenk2/do-dyndns:ARCH
+      platforms:
+        - linux/arm
+        - linux/arm64
+      ignore_missing: true
 
