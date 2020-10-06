@@ -1,3 +1,10 @@
+## [1.1.7](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.6...v1.1.7) (2020-10-06)
+
+
+### Bug Fixes
+
+* change base images for arm thingies ([03cd09b](https://github.com/cenk1cenk2/do-dyndns/commit/03cd09b6d313b4d4565480824ab615494adf4e29))
+
 ## [1.1.6](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.5...v1.1.6) (2020-10-06)
 
 
