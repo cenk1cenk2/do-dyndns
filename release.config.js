@@ -52,8 +52,8 @@ module.exports = {
           "label": "do-dyndns-linux-x64_v<%= nextRelease.version %>"
         },
         {
-          "path": "dist/do-dyndns-linux-arm7",
-          "label": "do-dyndns-linux-arm7_v<%= nextRelease.version %>"
+          "path": "dist/do-dyndns-linux-arm",
+          "label": "do-dyndns-linux-arm_v<%= nextRelease.version %>"
         },
         {
           "path": "dist/do-dyndns-linux-arm64",

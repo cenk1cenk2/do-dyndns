@@ -54,6 +54,7 @@ steps:
         from_secret: docker_password
       build_args:
         - BINARY_NAME=linux-x64
+      auto_tag: true
     depends_on:
       - semantic-release
     when:
@@ -62,7 +63,7 @@ steps:
       branch:
         - master
 
-  - name: publish-arm7
+  - name: publish-arm
     image: plugins/docker
     settings:
       repo: cenk1cenk2/do-dyndns
@@ -71,9 +72,9 @@ steps:
       password:
         from_secret: docker_password
       build_args:
-        - BINARY_NAME=linux-arm7
-      tags:
-        - arm7
+        - BINARY_NAME=linux-arm
+      auto_tag: true
+      auto_tag_suffix: linux-arm
     depends_on:
       - semantic-release
     when:
@@ -92,8 +93,8 @@ steps:
         from_secret: docker_password
       build_args:
         - BINARY_NAME=linux-arm64
-      tags:
-        - arm64
+      auto_tag: true
+      auto_tag_suffix: arm64
     depends_on:
       - semantic-release
     when:
@@ -101,3 +102,30 @@ steps:
         - push
       branch:
         - master
+
+---
+kind: pipeline
+type: docker
+name: manifest
+
+steps:
+- name: publish
+  image: plugins/manifest:1.2
+  settings:
+    auto_tag: true
+    ignore_missing: true
+    spec: .manifest.tmpl
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+trigger:
+  event:
+    - push
+  branch:
+    - master
+
+depends_on:
+- publish-arm
+- publish-arm64

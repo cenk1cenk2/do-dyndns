@@ -1,0 +1,25 @@
+image: cenk1cenk2/do-dyndns:{{#if build.tag}}{{trimPrefix "v" build.tag}}{{else}}latest{{/if}}
+{{#if build.tags}}
+tags:
+{{#each build.tags}}
+  - {{this}}
+{{/each}}
+{{/if}}
+manifests:
+  -
+    image: cenk1cenk2/do-dyndns:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}
+    platform:
+      architecture: amd64
+      os: linux
+  -
+    image: cenk1cenk2/do-dyndns:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}linux-arm64
+    platform:
+      architecture: arm64
+      os: linux
+      variant: v8
+  -
+    image: cenk1cenk2/do-dyndns:{{#if build.tag}}{{trimPrefix "v" build.tag}}-{{/if}}linux-arm
+    platform:
+      architecture: arm
+      os: linux
+      variant: v7
