@@ -1,3 +1,11 @@
+## [1.1.4](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.3...v1.1.4) (2020-10-06)
+
+
+### Bug Fixes
+
+* give up on external manifest ([c779960](https://github.com/cenk1cenk2/do-dyndns/commit/c779960756c3e75ca72c0d1dd67ff35c848c785a))
+* retry ([ddfcde2](https://github.com/cenk1cenk2/do-dyndns/commit/ddfcde2680a0274a47d0e12072d62686138df390))
+
 ## [1.1.3](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.2...v1.1.3) (2020-10-06)
 
 
