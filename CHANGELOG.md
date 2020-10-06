@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/cenk1cenk2/do-dyndns/compare/v1.0.15...v1.1.0) (2020-10-06)
+
+
+### Features
+
+* added arm versions, cleaned the repo up, bump up versions ([b96d656](https://github.com/cenk1cenk2/do-dyndns/commit/b96d656aaf1cba05f89cf23d3d1f6c0b38e4b53b))
+
 ## [1.0.15](https://github.com/cenk1cenk2/do-dyndns/compare/v1.0.14...v1.0.15) (2020-06-19)
 
 
