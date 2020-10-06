@@ -1,3 +1,10 @@
+## [1.1.9](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.8...v1.1.9) (2020-10-06)
+
+
+### Bug Fixes
+
+* update arm ([9c620c3](https://github.com/cenk1cenk2/do-dyndns/commit/9c620c3f1e7b969b4b5321514ede5ff1bd2a0d25))
+
 ## [1.1.8](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.7...v1.1.8) (2020-10-06)
 
 
