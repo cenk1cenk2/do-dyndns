@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.1...v1.1.2) (2020-10-06)
+
+
+### Bug Fixes
+
+* try to fix manifest ([64835cc](https://github.com/cenk1cenk2/do-dyndns/commit/64835ccabe09f1abbe0bd83e2bdb2d4297f00127))
+
 ## [1.1.1](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.0...v1.1.1) (2020-10-06)
 
 
