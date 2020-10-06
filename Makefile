@@ -29,7 +29,7 @@ build-linux-amd64:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_FOLDER)/$(BINARY_NAME)-linux-x64
 
 build-linux-arm7:
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 $(GOBUILD) -o $(BINARY_FOLDER)/$(BINARY_NAME)-linux-arm7
+	CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=7 $(GOBUILD) -o $(BINARY_FOLDER)/$(BINARY_NAME)-linux-arm7
 
 build-linux-arm64:
 	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 $(GOBUILD) -o $(BINARY_FOLDER)/$(BINARY_NAME)-linux-arm64

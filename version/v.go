@@ -1,4 +1,4 @@
 package version
 
-// V get current version of application
-var V string = "1.0.15"
+// Version get current version of application
+var Version string = "1.0.15"
