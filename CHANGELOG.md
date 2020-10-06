@@ -1,3 +1,11 @@
+## [1.1.1](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.0...v1.1.1) (2020-10-06)
+
+
+### Bug Fixes
+
+* rename ([574443a](https://github.com/cenk1cenk2/do-dyndns/commit/574443ad26c5d38bc6491cc722a409b2d20416f4))
+* update manifests ([2c72889](https://github.com/cenk1cenk2/do-dyndns/commit/2c7288932c23e44ff8dd485c0ed9a6be6943a6b1))
+
 # [1.1.0](https://github.com/cenk1cenk2/do-dyndns/compare/v1.0.15...v1.1.0) (2020-10-06)
 
 
