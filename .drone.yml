@@ -55,3 +55,61 @@ steps:
         - push
       branch:
         - master
+
+  - name: publish-amd64
+    image: plugins/docker
+    settings:
+      repo: cenk1cenk2/do-dyndns
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      build_args:
+        - BINARY_NAME=linux-x64
+    depends_on:
+      - semantic-release
+    when:
+      event:
+        - push
+      branch:
+        - master
+
+  - name: publish-arm7
+    image: plugins/docker
+    settings:
+      repo: cenk1cenk2/do-dyndns
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      build_args:
+        - BINARY_NAME=linux-arm7
+      tags:
+        - arm7
+    depends_on:
+      - semantic-release
+    when:
+      event:
+        - push
+      branch:
+        - master
+
+  - name: publish-arm64
+    image: plugins/docker
+    settings:
+      repo: cenk1cenk2/do-dyndns
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      build_args:
+        - BINARY_NAME=linux-arm64
+      tags:
+        - arm64
+    depends_on:
+      - semantic-release
+    when:
+      event:
+        - push
+      branch:
+        - master

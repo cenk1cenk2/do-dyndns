@@ -14,12 +14,10 @@ import (
 	"time"
 
 	utils "github.com/cenk1cenk2/do-dyndns/utils"
+	version "github.com/cenk1cenk2/do-dyndns/version"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
-
-// Version get current version of application
-var Version string = "1.0.15"
 
 type iflags struct {
 	once *bool
@@ -36,7 +34,7 @@ var rootCmd = &cobra.Command{
 	Use:     "do-dyndns",
 	Short:   "Dynamically set your subdomains IP addresses that utilize Digital Ocean nameservers.",
 	Example: `Please visit url for readme "https://github.com/cenk1cenk2/do-dyndns/blob/master/README.md"`,
-	Version: Version,
+	Version: version.V,
 	PreRun:  func(cmd *cobra.Command, args []string) { preRun(cmd, args) },
 	Run:     func(cmd *cobra.Command, args []string) { run(cmd, args) },
 }
@@ -408,7 +406,7 @@ func getMissingSlice(a, b []string) []string {
 }
 
 func init() {
-	fmt.Println("|d|o|-|d|y|n|d|n|s|", fmt.Sprintf("v%s", Version))
+	fmt.Println("|d|o|-|d|y|n|d|n|s|", fmt.Sprintf("v%s", version.V))
 
 	// persistent flags
 	rootCmd.PersistentFlags().StringVar(&utils.Cfg, "config", "", "config file ({.,/etc/do-dyndns,~/.config/do-dyndns}/.do-dyndns.yml)")

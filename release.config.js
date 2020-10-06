@@ -13,11 +13,11 @@ module.exports = {
       "@google/semantic-release-replace-plugin",
       {
         "replacements": [{
-          "files": ["cmd/root.go"],
+          "files": ["version/v.go"],
           "from": "var Version string = \".*\"",
           "to": "var Version string = \"${nextRelease.version}\"",
           "results": [{
-            "file": "cmd/root.go",
+            "file": "version/v.go",
             "hasChanged": true,
             "numMatches": 1,
             "numReplacements": 1
@@ -36,7 +36,7 @@ module.exports = {
       "@semantic-release/git",
       {
         "assets": [
-          "cmd/root.go",
+          "version/v.go",
           "CHANGELOG.md",
           process.env.README_LOCATION ? process.env.README_LOCATION : 'README.md',
           "yarn.lock",
@@ -50,6 +50,14 @@ module.exports = {
         "assets": [{
           "path": "dist/do-dyndns-linux-x64",
           "label": "do-dyndns-linux-x64_v<%= nextRelease.version %>"
+        },
+        {
+          "path": "dist/do-dyndns-linux-arm7",
+          "label": "do-dyndns-linux-arm7_v<%= nextRelease.version %>"
+        },
+        {
+          "path": "dist/do-dyndns-linux-arm64",
+          "label": "do-dyndns-linux-arm64_v<%= nextRelease.version %>"
         }]
       }
     ]

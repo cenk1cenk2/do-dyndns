@@ -1,10 +1,12 @@
 FROM alpine:latest
 
+ARG BINARY_NAME
+
 # Copy built files
-COPY dist/do-dyndns-linux-x64 /usr/bin
+COPY dist/do-dyndns-${BINARY_NAME} /usr/bin
 
 # Move built files
-RUN mv /usr/bin/do-dyndns-linux-x64 /usr/bin/do-dyndns && \
+RUN mv /usr/bin/do-dyndns-${BINARY_NAME} /usr/bin/do-dyndns && \
   chmod +x /usr/bin/do-dyndns
 
 # Install Tini
