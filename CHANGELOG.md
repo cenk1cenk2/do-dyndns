@@ -1,3 +1,10 @@
+## [1.1.5](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.4...v1.1.5) (2020-10-06)
+
+
+### Bug Fixes
+
+* **docker-hub:** update manifest ([2ae5da2](https://github.com/cenk1cenk2/do-dyndns/commit/2ae5da2074a961e2bb91d58dafc3fe1c451319df))
+
 ## [1.1.4](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.3...v1.1.4) (2020-10-06)
 
 
