@@ -72,7 +72,7 @@ steps:
         from_secret: docker_password
       build_args:
         - BINARY_NAME=linux-arm
-      auto_tag_suffix: linux-arm
+      auto_tag_suffix: arm
     depends_on:
       - semantic-release
     when:
