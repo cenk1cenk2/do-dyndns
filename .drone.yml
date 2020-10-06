@@ -115,4 +115,7 @@ steps:
         - linux/arm
         - linux/arm64
       ignore_missing: true
+    depends_on:
+      - publish-arm
+      - publish-arm64
 
