@@ -114,7 +114,7 @@ steps:
   settings:
     auto_tag: true
     ignore_missing: true
-    spec: .manifest.tmpl
+    spec: .docker-manifest.tmpl
     username:
       from_secret: docker_username
     password:
