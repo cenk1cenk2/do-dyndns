@@ -103,29 +103,22 @@ steps:
       branch:
         - master
 
----
-kind: pipeline
-type: docker
-name: manifest
+  - name: publish-manifest
+    image: plugins/manifest:1.2
+    settings:
+      auto_tag: true
+      ignore_missing: true
+      spec: .docker-manifest.tmpl
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+    depends_on:
+      - publish-arm
+      - publish-arm64
+    when:
+      event:
+        - push
+      branch:
+        - master
 
-steps:
-- name: publish
-  image: plugins/manifest:1.2
-  settings:
-    auto_tag: true
-    ignore_missing: true
-    spec: .docker-manifest.tmpl
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-
-trigger:
-  event:
-    - push
-  branch:
-    - master
-
-depends_on:
-- publish-arm
-- publish-arm64
