@@ -1,6 +1,6 @@
 ARG IMAGE_NAME
 
-FROM alpine:latest
+FROM ${IMAGE_NAME}
 
 ARG BINARY_NAME
 
