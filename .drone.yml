@@ -102,20 +102,32 @@ steps:
       branch:
         - master
 
-  - name: manifest
+  - name: manifest-arm
     image: plugins/manifest
     settings:
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      target: cenk1cenk2/do-dyndns
+      target: cenk1cenk2/do-dyndns:arm
       template: cenk1cenk2/do-dyndns:ARCH
       platforms:
         - linux/arm
-        - linux/arm64
       ignore_missing: true
     depends_on:
       - publish-arm
-      - publish-arm64
 
+  - name: manifest-arm64
+    image: plugins/manifest
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      target: cenk1cenk2/do-dyndns:arm64
+      template: cenk1cenk2/do-dyndns:ARCH
+      platforms:
+        - linux/arm64
+      ignore_missing: true
+    depends_on:
+      - publish-arm64
