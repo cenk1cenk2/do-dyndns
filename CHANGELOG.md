@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.2...v1.1.3) (2020-10-06)
+
+
+### Bug Fixes
+
+* retry suffix ([ed25137](https://github.com/cenk1cenk2/do-dyndns/commit/ed25137e551fdcdd704040c2a64b28fb11115496))
+
 ## [1.1.2](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.1...v1.1.2) (2020-10-06)
 
 
