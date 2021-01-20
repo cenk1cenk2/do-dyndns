@@ -45,22 +45,22 @@ steps:
         - master
 
   - name: docker-build
-    image: plugins/docker
-    settings:
-      repo: cenk1cenk2/do-dyndns
-      username:
-        from_secret: docker_username
-      password:
-        from_secret: docker_password
-      build_args:
-        - IMAGE_NAME=alpine:latest
-        - BINARY_NAME=linux-x64
+    image: docker:dind
+    volumes:
+      - name: dockersock
+        path: /var/run
     commands:
+      - sleep 5
       - docker version
-      - docker login -u $PLUGIN_USERNAME -p $PLUGIN_PASSWORD
+      - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - docker buildx create --name builder --use
       - docker buildx inspect --bootstrap
       - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t cenk1cenk2/do-dyndns:latest --push .
+    environment:
+      DOCKER_USERNAME:
+        from_secret: docker_username
+      DOCKER_PASSWORD:
+        from_secret: docker_password
     depends_on:
       - semantic-release
     when:
@@ -69,74 +69,86 @@ steps:
       branch:
         - master
 
-  # - name: publish-arm
-  #   image: plugins/docker
-  #   settings:
-  #     repo: cenk1cenk2/do-dyndns
-  #     username:
-  #       from_secret: docker_username
-  #     password:
-  #       from_secret: docker_password
-  #     build_args:
-  #       - IMAGE_NAME=arm32v7/alpine
-  #       - BINARY_NAME=linux-arm
-  #     tags:
-  #       - arm
-  #   depends_on:
-  #     - semantic-release
-  #   when:
-  #     event:
-  #       - push
-  #     branch:
-  #       - master
-  #
-  # - name: publish-arm64
-  #   image: plugins/docker
-  #   settings:
-  #     repo: cenk1cenk2/do-dyndns
-  #     username:
-  #       from_secret: docker_username
-  #     password:
-  #       from_secret: docker_password
-  #     build_args:
-  #       - IMAGE_NAME=arm64v8/alpine
-  #       - BINARY_NAME=linux-arm64
-  #     tags:
-  #       - arm64
-  #   depends_on:
-  #     - semantic-release
-  #   when:
-  #     event:
-  #       - push
-  #     branch:
-  #       - master
-  #
-  # - name: manifest-arm
-  #   image: plugins/manifest
-  #   settings:
-  #     username:
-  #       from_secret: docker_username
-  #     password:
-  #       from_secret: docker_password
-  #     target: cenk1cenk2/do-dyndns:arm
-  #     template: cenk1cenk2/do-dyndns:ARCH
-  #     platforms:
-  #       - linux/arm
-  #     ignore_missing: true
-  #   depends_on:
-  #     - publish-arm
-  #
-  # - name: manifest-arm64
-  #   image: plugins/manifest
-  #   settings:
-  #     username:
-  #       from_secret: docker_username
-  #     password:
-  #       from_secret: docker_password
-  #     target: cenk1cenk2/do-dyndns:arm64
-  #     template: cenk1cenk2/do-dyndns:ARCH
-  #     platforms:
-  #       - linux/arm64
-  #     ignore_missing: true
-  #   depends_on:
-  #     - publish-arm64
+services:
+  - name: docker
+    image: docker:dind
+    privileged: true
+    volumes:
+      - name: dockersock
+        path: /var/run
+
+volumes:
+  - name: dockersock
+    temp: {}
+
+    # - name: publish-arm
+    #   image: plugins/docker
+    #   settings:
+    #     repo: cenk1cenk2/do-dyndns
+    #     username:
+    #       from_secret: docker_username
+    #     password:
+    #       from_secret: docker_password
+    #     build_args:
+    #       - IMAGE_NAME=arm32v7/alpine
+    #       - BINARY_NAME=linux-arm
+    #     tags:
+    #       - arm
+    #   depends_on:
+    #     - semantic-release
+    #   when:
+    #     event:
+    #       - push
+    #     branch:
+    #       - master
+    #
+    # - name: publish-arm64
+    #   image: plugins/docker
+    #   settings:
+    #     repo: cenk1cenk2/do-dyndns
+    #     username:
+    #       from_secret: docker_username
+    #     password:
+    #       from_secret: docker_password
+    #     build_args:
+    #       - IMAGE_NAME=arm64v8/alpine
+    #       - BINARY_NAME=linux-arm64
+    #     tags:
+    #       - arm64
+    #   depends_on:
+    #     - semantic-release
+    #   when:
+    #     event:
+    #       - push
+    #     branch:
+    #       - master
+    #
+    # - name: manifest-arm
+    #   image: plugins/manifest
+    #   settings:
+    #     username:
+    #       from_secret: docker_username
+    #     password:
+    #       from_secret: docker_password
+    #     target: cenk1cenk2/do-dyndns:arm
+    #     template: cenk1cenk2/do-dyndns:ARCH
+    #     platforms:
+    #       - linux/arm
+    #     ignore_missing: true
+    #   depends_on:
+    #     - publish-arm
+    #
+    # - name: manifest-arm64
+    #   image: plugins/manifest
+    #   settings:
+    #     username:
+    #       from_secret: docker_username
+    #     password:
+    #       from_secret: docker_password
+    #     target: cenk1cenk2/do-dyndns:arm64
+    #     template: cenk1cenk2/do-dyndns:ARCH
+    #     platforms:
+    #       - linux/arm64
+    #     ignore_missing: true
+    #   depends_on:
+    #     - publish-arm64
