@@ -1,3 +1,12 @@
+## [1.1.12](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.11...v1.1.12) (2021-01-20)
+
+
+### Bug Fixes
+
+* commit ([c0ae901](https://github.com/cenk1cenk2/do-dyndns/commit/c0ae9015d738583d63848a1d8518521715c1c5ff))
+* test ([ab5cd96](https://github.com/cenk1cenk2/do-dyndns/commit/ab5cd96adc4179dca48683ed524a735d41a73037))
+* update ([9fddabf](https://github.com/cenk1cenk2/do-dyndns/commit/9fddabf0049b051a1f4f4d6043e70616bd61e878))
+
 ## [1.1.11](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.10...v1.1.11) (2021-01-20)
 
 
