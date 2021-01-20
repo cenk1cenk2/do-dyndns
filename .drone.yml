@@ -11,6 +11,7 @@ steps:
     image: golang:alpine
     commands:
       - apk add --no-cache --no-progress make
+      - make install
       - make -j3 build
     when:
       event:
