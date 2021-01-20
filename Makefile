@@ -26,10 +26,10 @@ clean:
 build: build-linux-amd64 build-linux-arm build-linux-arm64
 
 build-linux-amd64:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_FOLDER)/$(BINARY_NAME)-linux-x64
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_FOLDER)/$(BINARY_NAME)-linux-amd64
 
 build-linux-arm:
-	GOOS=linux GOARCH=arm GOARM=7 $(GOBUILD) -mod=readonly -a -installsuffix cgo -ldflags "$$LD_FLAGS" -o $(BINARY_FOLDER)/$(BINARY_NAME)-linux-arm
+	GOOS=linux GOARCH=arm GOARM=7 $(GOBUILD) -mod=readonly -a -installsuffix cgo -ldflags "$$LD_FLAGS" -o $(BINARY_FOLDER)/$(BINARY_NAME)-linux-armv7
 
 build-linux-arm64:
 	GOOS=linux GOARCH=arm64 $(GOBUILD) -mod=readonly -a -installsuffix cgo -ldflags "$$LD_FLAGS" -o $(BINARY_FOLDER)/$(BINARY_NAME)-linux-arm64

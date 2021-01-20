@@ -1,14 +1,14 @@
-ARG IMAGE_NAME
+ARG TARGETOS
+ARG TARGETARCH
+ARG TARGETVARIANT
 
-FROM ${IMAGE_NAME}
-
-ARG BINARY_NAME
+FROM alpine:latest
 
 # Copy built files
-COPY dist/do-dyndns-${BINARY_NAME} /usr/bin
+COPY dist/do-dyndns-${TARGETOS}-${TARGETARCH}${TARGETVARIANT} /usr/bin
 
 # Move built files
-RUN mv /usr/bin/do-dyndns-${BINARY_NAME} /usr/bin/do-dyndns && \
+RUN mv /usr/bin/do-dyndns-${TARGETOS}-${TARGETARCH}${TARGETVARIANT} /usr/bin/do-dyndns && \
   chmod +x /usr/bin/do-dyndns
 
 # Install Tini
@@ -18,4 +18,4 @@ RUN apk --no-cache --no-progress add tini
 RUN printf "#!/bin/ash\ndo-dyndns" > /entrypoint.sh && \
   chmod +x /entrypoint.sh
 
-ENTRYPOINT ["/sbin/tini", "-vg", "--", "/entrypoint.sh"]
+ENTRYPOINT ["/sbin/tini", "-g", "--", "/entrypoint.sh"]

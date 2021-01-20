@@ -11,7 +11,7 @@ steps:
     image: golang:alpine
     commands:
       - apk add --no-cache --no-progress make
-      - make build
+      - make -j3 build
     when:
       event:
         - push
@@ -88,75 +88,3 @@ services:
 volumes:
   - name: dockersock
     temp: {}
-
-    # - name: publish-arm
-    #   image: plugins/docker
-    #   settings:
-    #     repo: cenk1cenk2/do-dyndns
-    #     username:
-    #       from_secret: docker_username
-    #     password:
-    #       from_secret: docker_password
-    #     build_args:
-    #       - IMAGE_NAME=arm32v7/alpine
-    #       - BINARY_NAME=linux-arm
-    #     tags:
-    #       - arm
-    #   depends_on:
-    #     - semantic-release
-    #   when:
-    #     event:
-    #       - push
-    #     branch:
-    #       - master
-    #
-    # - name: publish-arm64
-    #   image: plugins/docker
-    #   settings:
-    #     repo: cenk1cenk2/do-dyndns
-    #     username:
-    #       from_secret: docker_username
-    #     password:
-    #       from_secret: docker_password
-    #     build_args:
-    #       - IMAGE_NAME=arm64v8/alpine
-    #       - BINARY_NAME=linux-arm64
-    #     tags:
-    #       - arm64
-    #   depends_on:
-    #     - semantic-release
-    #   when:
-    #     event:
-    #       - push
-    #     branch:
-    #       - master
-    #
-    # - name: manifest-arm
-    #   image: plugins/manifest
-    #   settings:
-    #     username:
-    #       from_secret: docker_username
-    #     password:
-    #       from_secret: docker_password
-    #     target: cenk1cenk2/do-dyndns:arm
-    #     template: cenk1cenk2/do-dyndns:ARCH
-    #     platforms:
-    #       - linux/arm
-    #     ignore_missing: true
-    #   depends_on:
-    #     - publish-arm
-    #
-    # - name: manifest-arm64
-    #   image: plugins/manifest
-    #   settings:
-    #     username:
-    #       from_secret: docker_username
-    #     password:
-    #       from_secret: docker_password
-    #     target: cenk1cenk2/do-dyndns:arm64
-    #     template: cenk1cenk2/do-dyndns:ARCH
-    #     platforms:
-    #       - linux/arm64
-    #     ignore_missing: true
-    #   depends_on:
-    #     - publish-arm64
