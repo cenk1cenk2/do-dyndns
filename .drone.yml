@@ -45,7 +45,7 @@ steps:
         - master
 
   - name: buildx
-    image: docker/docker
+    image: docker
     commands:
       - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       - docker buildx create --name buildx --use
