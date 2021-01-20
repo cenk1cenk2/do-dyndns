@@ -1,3 +1,10 @@
+## [1.1.11](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.10...v1.1.11) (2021-01-20)
+
+
+### Bug Fixes
+
+* image name ([7fa0ba1](https://github.com/cenk1cenk2/do-dyndns/commit/7fa0ba1a75e84f661de89666770cced139a104a2))
+
 ## [1.1.10](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.9...v1.1.10) (2021-01-20)
 
 
