@@ -78,7 +78,8 @@ steps:
 services:
   - name: docker
     image: docker:dind
-    command: --experimental
+    command:
+      - --experimental
     privileged: true
     volumes:
       - name: dockersock
