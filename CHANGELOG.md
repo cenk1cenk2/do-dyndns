@@ -1,3 +1,12 @@
+## [1.1.10](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.9...v1.1.10) (2021-01-20)
+
+
+### Bug Fixes
+
+* retry ([d6a3476](https://github.com/cenk1cenk2/do-dyndns/commit/d6a3476603aa1ff521a59e7fe673472075ad6a2a))
+* retry ([2156db2](https://github.com/cenk1cenk2/do-dyndns/commit/2156db23f6ca1b0c1a308d144896e01c7990165f))
+* try docker buildx ([cf4c00e](https://github.com/cenk1cenk2/do-dyndns/commit/cf4c00e6bf616c6dd4b7fbd036d3f374ad158ac9))
+
 ## [1.1.9](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.8...v1.1.9) (2020-10-06)
 
 

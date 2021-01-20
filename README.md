@@ -6,12 +6,12 @@
 
 - [Description](#description)
 - [Install](#install)
+  - [Pre-Compiled](#pre-compiled)
   - [Using the Bash Script](#using-the-bash-script)
-  - [Manually](#manually)
 - [Configure](#configure)
-  - [Utilizing the Config File](#utilizing-the-config-file)
+  - [Utilizing the Configuration File](#utilizing-the-configuration-file)
   - [Utilizing the Environment Variables](#utilizing-the-environment-variables)
-  - [Run With Docker](#run-with-docker)
+- [Run With Docker](#run-with-docker)
 
 <!-- tocstop -->
 
