@@ -15,13 +15,19 @@
 
 <!-- tocstop -->
 
+---
+
 ## Description
 
-This utility provides a native way to update "A" records of a domain that is managed by Digital Ocean nameservers. Simply create an API token to access and update domain records depending on the IP address of the host that is running this utility.
+This utility provides a native way to update "A" records of a domain that is managed by Digital Ocean name-servers. Simply create an API token to access and update domain records depending on the IP address of the host that is running this utility.
 
 ## Install
 
-Only Linux-x64 platform is supported at the moment. If you need to run this on other platform please open up a issue.
+Only linux-x64 platform is supported at the moment. If you need to run this on other platform please open up a issue.
+
+### Pre-Compiled
+
+You can find the natively compiled versions in the [releases](https://github.com/cenk1cenk2/do-dyndns/releases/latest).
 
 ### Using the Bash Script
 
@@ -29,13 +35,9 @@ Only Linux-x64 platform is supported at the moment. If you need to run this on o
 curl https://raw.githubusercontent.com/cenk1cenk2/do-dyndns/master/install.sh | bash
 ```
 
-### Manually
-
-You can find the natively compiled versions in the [releases](https://github.com/cenk1cenk2/do-dyndns/releases/latest).
-
 ## Configure
 
-### Utilizing the Config File
+### Utilizing the Configuration File
 
 Create a `.yml` file in any of the locations `.`, `/etc/do-dyndns`, `~/.config/do-dyndns` named `.do-dyndns.yml`.
 
@@ -60,7 +62,7 @@ To run with environment variables just pass in the variables with `DYNDNS_` pref
 DYNDNS_DOMAINS=example1.com,example2.com DYNDNS_SUBDOMAINS=1.example1.com,2.example2.com DYNDNS_TOKEN=$DIGITAL_OCEAN_TOKEN do-dyndns
 ```
 
-### Run With Docker
+## Run With Docker
 
 There is also published versions of this tool to the Docker Hub.
 
