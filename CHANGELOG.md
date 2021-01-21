@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.1...v1.2.2) (2021-01-21)
+
+
+### Bug Fixes
+
+* update drone tag ([a41491f](https://github.com/cenk1cenk2/do-dyndns/commit/a41491f32510122dc6afde0e89a63c9a62dc63f0))
+
 ## [1.2.1](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.0...v1.2.1) (2021-01-21)
 
 
