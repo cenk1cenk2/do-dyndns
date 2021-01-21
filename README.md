@@ -6,7 +6,7 @@
 
 - [Description](#description)
 - [Install](#install)
-- [Deploy with docker-compose](#deploy-with-docker-compose)
+  - [Deploy with docker-compose](#deploy-with-docker-compose)
   - [Get Binary From Releases](#get-binary-from-releases)
   - [Install Binary with Bash Script](#install-binary-with-bash-script)
 - [Setup](#setup)

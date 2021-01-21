@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.0...v1.2.1) (2021-01-21)
+
+
+### Bug Fixes
+
+* update per tag publish ([ebaac94](https://github.com/cenk1cenk2/do-dyndns/commit/ebaac94fc8cf33d8b33ab8e383d3cfb8c5fa640a))
+
 # [1.2.0](https://github.com/cenk1cenk2/do-dyndns/compare/v1.1.15...v1.2.0) (2021-01-21)
 
 
