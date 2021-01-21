@@ -9,16 +9,6 @@ trigger:
     - master
 
 steps:
-  - name: build
-    image: golang:alpine
-    commands:
-      - apk add --no-cache --no-progress make
-      - make install
-      - make -j3 build
-    when:
-      event:
-        - push
-
   - name: semantic-release
     image: cenk1cenk2/drone-semantic-release
     depends_on:
@@ -42,6 +32,16 @@ steps:
     when:
       event:
         - push
+        
+  - name: build
+    image: golang:alpine
+    commands:
+      - apk add --no-cache --no-progress make
+      - make install
+      - make -j3 build
+    when:
+      event:
+        - tag        
 
   - name: docker-build
     image: docker:dind
@@ -81,9 +81,6 @@ services:
     volumes:
       - name: dockersock
         path: /var/run
-    when:
-      event:
-        - tag     
 
 volumes:
   - name: dockersock
