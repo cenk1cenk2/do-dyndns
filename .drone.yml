@@ -73,9 +73,9 @@ steps:
 services:
   - name: docker
     image: docker:dind
+    privileged: true
     command:
       - --experimental
-    privileged: true
     volumes:
       - name: dockersock
         path: /var/run
