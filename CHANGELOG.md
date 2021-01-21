@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.3...v1.2.4) (2021-01-21)
+
+
+### Bug Fixes
+
+* delete stupid ([8a1d098](https://github.com/cenk1cenk2/do-dyndns/commit/8a1d098cd9017516ff3cb1fac7bd1cf8effe74fa))
+
 ## [1.2.3](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.2...v1.2.3) (2021-01-21)
 
 
