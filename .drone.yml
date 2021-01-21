@@ -3,6 +3,8 @@ kind: pipeline
 trigger:
   event:
     - push
+    - tag
+    - cron
   branch:
     - master
 
@@ -16,8 +18,6 @@ steps:
     when:
       event:
         - push
-      branch:
-        - master
 
   - name: semantic-release
     image: cenk1cenk2/drone-semantic-release
@@ -42,8 +42,6 @@ steps:
     when:
       event:
         - push
-      branch:
-        - master
 
   - name: docker-build
     image: docker:dind
@@ -60,21 +58,19 @@ steps:
       - docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
       - docker buildx create --use --name builder
       - docker buildx inspect --bootstrap
-      - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t $DOCKER_IMAGE_TAG --push .
+      - docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 $DOCKER_IMAGE_TAG --push .
     environment:
       BUILDX_VERSION: v0.5.1
       DOCKER_USERNAME:
         from_secret: docker_username
       DOCKER_PASSWORD:
         from_secret: docker_password
-      DOCKER_IMAGE_TAG: cenk1cenk2/do-dyndns:latest
+      DOCKER_IMAGE_TAG: -t cenk1cenk2/do-dyndns:latest -t cenk1cenk2/do-dyndns:${DRONE_TAG}
     depends_on:
       - semantic-release
     when:
       event:
-        - push
-      branch:
-        - master
+        - tag
 
 services:
   - name: docker
@@ -85,6 +81,9 @@ services:
     volumes:
       - name: dockersock
         path: /var/run
+    when:
+      event:
+        - tag     
 
 volumes:
   - name: dockersock
