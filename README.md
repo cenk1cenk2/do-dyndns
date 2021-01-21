@@ -25,7 +25,7 @@ This utility provides a native way to update "A" records of a domain that is man
 
 Platforms `linux-amd64`, `linux-arm64`, `linux-armv7` is supported.
 
-## Deploy with docker-compose
+### Deploy with docker-compose
 
 Published image is available in Docker Hub as `cenk1cenk2/do-dyndns`. Will work on every platform defined.
 
