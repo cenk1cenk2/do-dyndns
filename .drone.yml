@@ -82,7 +82,7 @@ services:
         path: /var/run
     when:
       event:
-        - tag
+        - push
 
 volumes:
   - name: dockersock
