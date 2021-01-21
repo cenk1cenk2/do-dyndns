@@ -11,8 +11,6 @@ trigger:
 steps:
   - name: semantic-release
     image: cenk1cenk2/drone-semantic-release
-    depends_on:
-      - build
     settings:
       add_modules:
         - '@google/semantic-release-replace-plugin'
@@ -67,7 +65,7 @@ steps:
         from_secret: docker_password
       DOCKER_IMAGE_TAG: -t cenk1cenk2/do-dyndns:latest
     depends_on:
-      - semantic-release
+      - build
     when:
       event:
         - tag
