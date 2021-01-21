@@ -48,7 +48,7 @@ steps:
         path: /var/run
     commands:
       - docker version
-      - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} %>
+      - docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
       - apk add curl --no-cache --no-progress
       - mkdir -p ~/.docker/cli-plugins
       - curl -sSLo ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/$BUILDX_VERSION/buildx-$BUILDX_VERSION.linux-amd64
