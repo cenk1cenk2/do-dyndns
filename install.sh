@@ -5,7 +5,7 @@ RELEASE_NAME="do-dyndns"
 GITHUB_USER="cenk1cenk2"
 GITHUB_REPO="do-dyndns"
 
-RELEASE_LINUX_X64="\-linux-x64"
+RELEASE_LINUX_AMD64="linux-amd64"
 CREATE_FOLDERS=
 
 INSTALL_LOCATION_LINUX="/usr/bin"
@@ -32,7 +32,7 @@ get_os_version() {
   PLATFORM=$(uname -i)
   if [ $OS = "Linux" ]; then
     if [ $PLATFORM = "x86_64" ]; then
-      RELEASE_PLATFORM="$RELEASE_LINUX_X64"
+      RELEASE_PLATFORM="$RELEASE_LINUX_AMD64"
     else
       exit_unsupported_os
     fi
