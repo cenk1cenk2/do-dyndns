@@ -1,3 +1,11 @@
+## [1.2.5](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.4...v1.2.5) (2021-03-09)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/antonfisher/nested-logrus-formatter to v1.3.1 ([763cd26](https://github.com/cenk1cenk2/do-dyndns/commit/763cd26dc9c835ab756f0f4d55ba54269dc27991))
+* **deps:** update module github.com/sirupsen/logrus to v1.8.1 ([ed11a6f](https://github.com/cenk1cenk2/do-dyndns/commit/ed11a6fefc324df85746901e5db59ed0c987d58e))
+
 ## [1.2.4](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.3...v1.2.4) (2021-01-21)
 
 
