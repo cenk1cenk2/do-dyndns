@@ -1,3 +1,10 @@
+## [1.2.7](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.6...v1.2.7) (2021-04-11)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/go-playground/validator/v10 to v10.5.0 ([fa3419a](https://github.com/cenk1cenk2/do-dyndns/commit/fa3419adf66551fd6fe7f2129347018b51fd8c8c))
+
 ## [1.2.6](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.5...v1.2.6) (2021-04-06)
 
 
