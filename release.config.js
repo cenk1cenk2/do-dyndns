@@ -1,4 +1,5 @@
 module.exports = {
+  repositoryUrl: 'git@github.com:cenk1cenk2/do-dyndns.git',
   plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
@@ -54,6 +55,7 @@ module.exports = {
           }
         ]
       }
-    ]
+    ],
+    '@semantic-release/gitlab'
   ]
 }

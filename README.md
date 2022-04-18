@@ -1,6 +1,6 @@
 # cenk1cenk2/do-dyndns
 
-[![Build Status](https://drone.kilic.dev/api/badges/cenk1cenk2/do-dyndns/status.svg)](https://drone.kilic.dev/cenk1cenk2/do-dyndns) [![Docker Pulls](https://img.shields.io/docker/pulls/cenk1cenk2/do-dyndns)](https://hub.docker.com/repository/docker/cenk1cenk2/do-dyndns) [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/cenk1cenk2/do-dyndns)](https://hub.docker.com/repository/docker/cenk1cenk2/do-dyndns) [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/cenk1cenk2/do-dyndns)](https://hub.docker.com/repository/docker/cenk1cenk2/do-dyndns) [![GitHub last commit](https://img.shields.io/github/last-commit/cenk1cenk2/do-dyndns)](https://github.com/cenk1cenk2/do-dyndns)
+[![pipeline status](https://gitlab.kilic.dev/docker/do-dyndns/badges/master/pipeline.svg)](https://gitlab.kilic.dev/docker/do-dyndns/-/commits/master) [![Docker Pulls](https://img.shields.io/docker/pulls/cenk1cenk2/do-dyndns)](https://hub.docker.com/repository/docker/cenk1cenk2/do-dyndns) [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/cenk1cenk2/do-dyndns)](https://hub.docker.com/repository/docker/cenk1cenk2/do-dyndns) [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/cenk1cenk2/do-dyndns)](https://hub.docker.com/repository/docker/cenk1cenk2/do-dyndns) [![GitHub last commit](https://img.shields.io/github/last-commit/cenk1cenk2/do-dyndns)](https://github.com/cenk1cenk2/do-dyndns)
 
 <!-- toc -->
 
@@ -78,6 +78,6 @@ To run with environment variables just pass in the variables with `DYNDNS_` pref
 | Environment Variable | Description                                                                                    | Default |
 | -------------------- | ---------------------------------------------------------------------------------------------- | ------- |
 | DYNDNS_TOKEN         | Digital Ocean API token.                                                                       |         |
-| DYNDNS_DOMAINS       | Comma-seperated list of domains to run against.                                                |         |
+| DYNDNS_DOMAINS       | Comma-separated list of domains to run against.                                                |         |
 | DYNDNS_SUBDOMAINS    | Comma-separated list of subdomains, which must match with the domains or else will be skipped. |         |
 | DYNDNS_REPEAT        | Check repeat time in seconds.                                                                  | 3600    |
