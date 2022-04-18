@@ -33,8 +33,3 @@ include:
   - project: devops/pipes
     file: /templates/update-docker-hub-readme.gitlab-ci.yml
     ref: main
-
-build-docker-image:
-  rules:
-    - exists:
-        - .tags
