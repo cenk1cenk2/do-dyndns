@@ -35,8 +35,7 @@ include:
     ref: main
 
 build-docker-image:
-  only:
-    refs:
-      - master
-    exists:
-      - .tags
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
+    - exists:
+        - .tags
