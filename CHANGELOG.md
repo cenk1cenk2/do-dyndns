@@ -4,6 +4,25 @@
 ### Bug Fixes
 
 * remove gitlab configuration ([62ff1da](https://github.com/cenk1cenk2/do-dyndns/commit/62ff1da918b9ed9f1047f13a1dc1838df717cf71))
+* remove versioning from git ([bfbf0f0](https://github.com/cenk1cenk2/do-dyndns/commit/bfbf0f01e900a6125ac82f5cf08842172de0031c))
+* update ([867d7a6](https://github.com/cenk1cenk2/do-dyndns/commit/867d7a6918dc5b2615ce91efc009964103a793cb))
+
+
+### Performance Improvements
+
+* change the building method move to gitlab and the logger ([f8a1de2](https://github.com/cenk1cenk2/do-dyndns/commit/f8a1de2845a8970f4549f1153685faa285189bee))
+
+
+### BREAKING CHANGES
+
+* can break previous versions
+
+# [2.0.0](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.7...v2.0.0) (2022-04-18)
+
+
+### Bug Fixes
+
+* remove gitlab configuration ([62ff1da](https://github.com/cenk1cenk2/do-dyndns/commit/62ff1da918b9ed9f1047f13a1dc1838df717cf71))
 
 
 ### Performance Improvements
