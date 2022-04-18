@@ -57,6 +57,5 @@ module.exports = {
         ],
       },
     ],
-    "@semantic-release/gitlab",
   ],
 };
