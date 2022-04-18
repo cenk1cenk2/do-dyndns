@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/cenk1cenk2/do-dyndns/compare/v2.1.3...v2.1.4) (2022-04-18)
+
+
+### Bug Fixes
+
+* remove drone config republish ([01362c4](https://github.com/cenk1cenk2/do-dyndns/commit/01362c45caec8259d5312c03941836006330262f))
+
 ## [2.1.3](https://github.com/cenk1cenk2/do-dyndns/compare/v2.1.2...v2.1.3) (2022-04-18)
 
 
