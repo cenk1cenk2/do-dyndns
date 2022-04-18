@@ -14,6 +14,11 @@ all: test build
 install:
 	$(GOVENDOR)
 
+update:
+	$(GOGET) -u all
+	$(GOVENDOR)
+	$(GOCMD) mod tidy -compat=1.17
+
 test:
 	$(GOTEST) -v ./...
 

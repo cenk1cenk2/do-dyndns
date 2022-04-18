@@ -3,8 +3,8 @@ package utils
 import (
 	"os"
 
-	nested "github.com/antonfisher/nested-logrus-formatter"
 	"github.com/sirupsen/logrus"
+	formatter "gitlab.kilic.dev/libraries/go-utils/logger/formatter"
 )
 
 // LogLevelVerbose log level for the cli
@@ -17,13 +17,8 @@ var Log = logrus.New()
 func InitiateLogger() {
 	Log.Out = os.Stdout
 
-	Log.SetFormatter(&nested.Formatter{
-		TimestampFormat: "20060102-15:04:05",
-		TrimMessages:    true,
-		HideKeys:        true,
-		FieldsOrder:     []string{"component", "action", "category"},
-		NoFieldsColors:  false,
-		ShowFullLevel:   true,
+	Log.SetFormatter(&formatter.Formatter{
+		FieldsOrder: []string{"component", "action", "category"},
 	})
 
 	// set log level
