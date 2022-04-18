@@ -1,3 +1,15 @@
+# [2.0.0](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.7...v2.0.0) (2022-04-18)
+
+
+### Performance Improvements
+
+* change the building method move to gitlab and the logger ([f8a1de2](https://github.com/cenk1cenk2/do-dyndns/commit/f8a1de2845a8970f4549f1153685faa285189bee))
+
+
+### BREAKING CHANGES
+
+* can break previous versions
+
 ## [1.2.7](https://github.com/cenk1cenk2/do-dyndns/compare/v1.2.6...v1.2.7) (2021-04-11)
 
 
