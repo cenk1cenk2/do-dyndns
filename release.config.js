@@ -29,7 +29,7 @@ module.exports = {
     [
       "@semantic-release/exec",
       {
-        generateNotesCmd: "echo 'latest,${nextRelease.version}' > .tags",
+        generateNotesCmd: "echo 'latest,v${nextRelease.version}' > .tags",
       },
     ],
     [
