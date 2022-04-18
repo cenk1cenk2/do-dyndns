@@ -7,7 +7,6 @@ GOGET=$(GOCMD) get
 GOVENDOR=$(GOCMD) mod vendor
 BINARY_FOLDER=dist
 BINARY_NAME=do-dyndns
-ENTRYPOINT=main
 
 all: test build
 
