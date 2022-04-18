@@ -1,4 +1,4 @@
 package version
 
 // Version get current version of application
-var Version string = "1.2.7"
+var Version string = "2.0.0"
