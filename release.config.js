@@ -1,6 +1,6 @@
 module.exports = {
   branches: ["master"],
-  repositoryUrl: "git@github.com:cenk1cenk2/do-dyndns.git",
+  repositoryUrl: "https://github.com/cenk1cenk2/do-dyndns",
   plugins: [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
