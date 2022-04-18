@@ -8,7 +8,6 @@ stages:
 variables:
   DOCKERFILE_CONTEXT: .
   DOCKER_IMAGE_NAME: cenk1cenk2/do-dyndns
-  IMAGE_TAGS: edge
   DOCKER_USE_BUILDX: 'true'
   DOCKER_BUILDX_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
   README_DESCRIPTION: |
