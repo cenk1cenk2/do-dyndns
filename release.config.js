@@ -10,7 +10,7 @@ module.exports = {
         replacements: [
           {
             files: ["version/v.go"],
-            from: 'var Version string = ".*"',
+            from: 'var Version string = "(.*)"',
             to: 'var Version string = "${nextRelease.version}"',
             results: [
               {
