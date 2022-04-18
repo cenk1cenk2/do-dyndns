@@ -36,6 +36,8 @@ include:
     ref: main
 
 build-docker-image:
+  services:
+    - docker:dind
   only:
     refs:
       - master
