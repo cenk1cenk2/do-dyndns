@@ -11,6 +11,8 @@ variables:
   IMAGE_TAGS: edge
   DOCKER_USE_BUILDX: 'true'
   DOCKER_BUILDX_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7
+  README_DESCRIPTION: |
+    Use dynamic DNS through Digital Ocean API for your domains.
 
 include:
   - project: devops/pipes
@@ -32,8 +34,3 @@ include:
   - project: devops/pipes
     file: /templates/update-docker-hub-readme.gitlab-ci.yml
     ref: main
-
-update-docker-hub-readme:
-  variables:
-    README_DESCRIPTION: |
-      Use dynamic DNS through Digital Ocean API for your domains.
