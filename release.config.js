@@ -35,7 +35,7 @@ module.exports = {
     [
       "@semantic-release/git",
       {
-        assets: ["version/v.go", "CHANGELOG.md", "README.md"],
+        assets: ["CHANGELOG.md", "README.md"],
       },
     ],
     [
