@@ -35,6 +35,5 @@ include:
 
 update-docker-hub-readme:
   variables:
-    README_FILE: ./README.md
     README_DESCRIPTION: |
       Use dynamic DNS through Digital Ocean API for your domains.
