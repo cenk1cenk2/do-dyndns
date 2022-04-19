@@ -28,5 +28,4 @@ func InitiateLogger() {
 	} else {
 		Log.SetLevel(logrus.InfoLevel)
 	}
-
 }

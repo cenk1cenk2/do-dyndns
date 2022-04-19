@@ -12,15 +12,15 @@ module.exports = {
             files: ["version/v.go"],
             from: 'var Version string = "(.*)"',
             to: 'var Version string = "${nextRelease.version}"',
-            results: [
-              {
-                file: "version/v.go",
-                hasChanged: true,
-                numMatches: 1,
-                numReplacements: 1,
-              },
-            ],
-            countMatches: true,
+            // results: [
+            //   {
+            //     file: "version/v.go",
+            //     hasChanged: true,
+            //     numMatches: 1,
+            //     numReplacements: 1,
+            //   },
+            // ],
+            // countMatches: true,
           },
         ],
       },
@@ -35,7 +35,7 @@ module.exports = {
     [
       "@semantic-release/git",
       {
-        assets: ["CHANGELOG.md", "README.md"],
+        assets: ["version/v.go", "CHANGELOG.md", "README.md"],
       },
     ],
     [

@@ -76,7 +76,8 @@ func run(cmd *cobra.Command, args []string) {
 		}
 
 		// sleep for predefined time
-		utils.Log.WithFields(log.Fields{"action": "HALT"}).Infof("Wait for %ds", utils.Config.Interval)
+		utils.Log.WithFields(log.Fields{"action": "HALT"}).
+			Infof("Wait for %ds", utils.Config.Interval)
 		time.Sleep(time.Second * time.Duration(utils.Config.Interval))
 	}
 
@@ -103,12 +104,14 @@ func domainWorker() {
 			// check if valid domain
 			re := *regexp.MustCompile(`^[^.]*\.[^.]*$`)
 			if !re.MatchString(domain) {
-				utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "SKIPPED"}).Errorln("Not a valid domain name:", domain)
+				utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "SKIPPED"}).
+					Errorln("Not a valid domain name:", domain)
 
 				return
 			}
 
-			utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "STARTED"}).Debugln("Worker of domain:", domain)
+			utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "STARTED"}).
+				Debugln("Worker of domain:", domain)
 
 			domainRecords, err := getDoDomainRecords(domain)
 
@@ -128,12 +131,20 @@ func domainWorker() {
 				if matched {
 					subdomainWG.Add(1)
 
-					go subdomainWorker(&subdomainWG, domain, subdomain, domainRecords, &subdomainsProcessed, subdomainsProcessedMutex)
+					go subdomainWorker(
+						&subdomainWG,
+						domain,
+						subdomain,
+						domainRecords,
+						&subdomainsProcessed,
+						subdomainsProcessedMutex,
+					)
 				}
 
 			}
 
-			utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "FINISHED"}).Debugln("Worker of domain:", domain)
+			utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "FINISHED"}).
+				Debugln("Worker of domain:", domain)
 
 			subdomainWG.Wait()
 
@@ -149,19 +160,29 @@ func domainWorker() {
 	notProcessedSubdomains := getMissingSlice(utils.Config.Subdomains, subdomainsProcessed)
 
 	if len(notProcessedDomains) > 0 {
-		utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "FAILED"}).Errorf("Failed for domains: %s", strings.Join(notProcessedDomains, ", "))
+		utils.Log.WithFields(log.Fields{"component": "DOMAIN", "action": "FAILED"}).
+			Errorf("Failed for domains: %s", strings.Join(notProcessedDomains, ", "))
 	}
 
 	if len(notProcessedSubdomains) > 0 {
-		utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "FAILED"}).Errorf("Failed for subdomains: %s", strings.Join(notProcessedSubdomains, ", "))
+		utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "FAILED"}).
+			Errorf("Failed for subdomains: %s", strings.Join(notProcessedSubdomains, ", "))
 	}
 
 }
 
-func subdomainWorker(wg *sync.WaitGroup, domain string, subdomain string, domainRecords []iDoDomainRecordsAPI, subdomainsProcessed *[]string, subdomainsProcessedMutex *sync.Mutex) {
+func subdomainWorker(
+	wg *sync.WaitGroup,
+	domain string,
+	subdomain string,
+	domainRecords []iDoDomainRecordsAPI,
+	subdomainsProcessed *[]string,
+	subdomainsProcessedMutex *sync.Mutex,
+) {
 	defer wg.Done()
 
-	utils.Log.WithField("component", "DOMAIN").Debugf("Matched domain %s with subdomain %s\n", domain, subdomain)
+	utils.Log.WithField("component", "DOMAIN").
+		Debugf("Matched domain %s with subdomain %s\n", domain, subdomain)
 
 	var parsedSubdomain string
 
@@ -184,13 +205,16 @@ func subdomainWorker(wg *sync.WaitGroup, domain string, subdomain string, domain
 			recordFound = true
 
 			if record.Data != ip {
-				utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "STARTED"}).Debugln("Worker of subdomain:", domain)
-				utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "CHANGE"}).Warningf(`Subdomain "%s" has different record of %s`, subdomain, record.Data)
+				utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "STARTED"}).
+					Debugln("Worker of subdomain:", domain)
+				utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "CHANGE"}).
+					Warningf(`Subdomain "%s" has different record of %s`, subdomain, record.Data)
 
 				res, err := setDoDomainRecords(domain, subdomain, record.ID)
 
 				if err != nil {
-					utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "FAILED"}).Errorln(err)
+					utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "FAILED"}).
+						Errorln(err)
 
 				} else {
 					utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "SUCCESS"}).Infoln(res)
@@ -205,7 +229,8 @@ func subdomainWorker(wg *sync.WaitGroup, domain string, subdomain string, domain
 	}
 
 	if !recordFound {
-		utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "SKIPPED"}).Errorf(`Subdomain "%s" does not have a "A" record`, subdomain)
+		utils.Log.WithFields(log.Fields{"component": "SUBDOMAIN", "action": "SKIPPED"}).
+			Errorf(`Subdomain "%s" does not have a "A" record`, subdomain)
 
 	} else {
 		subdomainsProcessedMutex.Lock()
@@ -216,7 +241,8 @@ func subdomainWorker(wg *sync.WaitGroup, domain string, subdomain string, domain
 }
 
 func getIP() {
-	utils.Log.WithFields(log.Fields{"component": "IP", "action": "START"}).Infoln("Fetching the IP address from the API")
+	utils.Log.WithFields(log.Fields{"component": "IP", "action": "START"}).
+		Infoln("Fetching the IP address from the API")
 
 	body, err := createAPIRequest("GET",
 		"https://api.ipify.org",
@@ -297,11 +323,15 @@ func getDoDomainRecords(domain string) ([]iDoDomainRecordsAPI, error) {
 	json.Unmarshal(body, &apiErr)
 
 	if apiErr.ID == "not_found" {
-		return []iDoDomainRecordsAPI{}, errors.New(fmt.Sprint("Records for the given domain can not be found: ", domain))
+		return []iDoDomainRecordsAPI{}, errors.New(
+			fmt.Sprint("Records for the given domain can not be found: ", domain),
+		)
 	}
 
 	if apiErr.ID == "Unauthorized" {
-		return []iDoDomainRecordsAPI{}, errors.New(fmt.Sprint("Token does not seem to be valid for domain: ", domain))
+		return []iDoDomainRecordsAPI{}, errors.New(
+			fmt.Sprint("Token does not seem to be valid for domain: ", domain),
+		)
 	}
 
 	var value iGetDoDomainRecordsAPIRes
@@ -317,7 +347,9 @@ func getDoDomainRecords(domain string) ([]iDoDomainRecordsAPI, error) {
 
 	// check the length of A records
 	if len(domainRecords) == 0 {
-		return []iDoDomainRecordsAPI{}, errors.New(fmt.Sprint("No A Records for given domain has been found: ", domain))
+		return []iDoDomainRecordsAPI{}, errors.New(
+			fmt.Sprint("No A Records for given domain has been found: ", domain),
+		)
 	}
 
 	return domainRecords, nil
@@ -339,11 +371,15 @@ func setDoDomainRecords(domain string, subdomain string, subdomainID int) (strin
 	json.Unmarshal(body, &apiErr)
 
 	if apiErr.ID == "not_found" {
-		return "", errors.New(fmt.Sprint("Digital Ocean API rejected the record for subdomain:", subdomain))
+		return "", errors.New(
+			fmt.Sprint("Digital Ocean API rejected the record for subdomain:", subdomain),
+		)
 	}
 
 	if apiErr.ID == "Unauthorized" {
-		return "", errors.New(fmt.Sprint("Token does not seem to be valid for subdomain: ", subdomain))
+		return "", errors.New(
+			fmt.Sprint("Token does not seem to be valid for subdomain: ", subdomain),
+		)
 	}
 
 	var value iSetDoDomainRecordsAPIRes
@@ -351,7 +387,9 @@ func setDoDomainRecords(domain string, subdomain string, subdomainID int) (strin
 
 	var record = value.DomainRecord
 	if record.Data != ip {
-		return "", errors.New(fmt.Sprint("Digital Ocean API failed to set the record for subdomain:", subdomain))
+		return "", errors.New(
+			fmt.Sprint("Digital Ocean API failed to set the record for subdomain:", subdomain),
+		)
 	}
 
 	return fmt.Sprintln("Changed DNS record for subdomain:", subdomain), nil
@@ -362,7 +400,12 @@ type iRequestHeaders struct {
 	Key   string
 }
 
-func createAPIRequest(method string, url string, data string, headers ...iRequestHeaders) ([]byte, error) {
+func createAPIRequest(
+	method string,
+	url string,
+	data string,
+	headers ...iRequestHeaders,
+) ([]byte, error) {
 	// initiations
 	var client = &http.Client{}
 
@@ -406,11 +449,13 @@ func getMissingSlice(a, b []string) []string {
 }
 
 func init() {
-	fmt.Println("|d|o|-|d|y|n|d|n|s|", fmt.Sprintf("v%s", version.Version))
+	fmt.Println("|d|o|-|d|y|n|d|n|s|", fmt.Sprintf("%s", version.Version))
 
 	// persistent flags
-	rootCmd.PersistentFlags().StringVar(&utils.Cfg, "config", "", "config file ({.,/etc/do-dyndns,~/.config/do-dyndns}/.do-dyndns.yml)")
-	rootCmd.PersistentFlags().BoolVar(&utils.LogLevelVerbose, "verbose", false, "Enable verbose logging.")
+	rootCmd.PersistentFlags().
+		StringVar(&utils.Cfg, "config", "", "config file ({.,/etc/do-dyndns,~/.config/do-dyndns}/.do-dyndns.yml)")
+	rootCmd.PersistentFlags().
+		BoolVar(&utils.LogLevelVerbose, "verbose", false, "Enable verbose logging.")
 
 	// initialize
 	cobra.OnInitialize(utils.InitiateLogger, utils.InitConfig)

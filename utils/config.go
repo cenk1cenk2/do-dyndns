@@ -12,9 +12,9 @@ import (
 )
 
 type config struct {
-	Domains    []string `mapstructure:"domains" validate:"required,unique"`
+	Domains    []string `mapstructure:"domains"    validate:"required,unique"`
 	Subdomains []string `mapstructure:"subdomains" validate:"required,unique"`
-	Token      string   `mapstructure:"token" validate:"required"`
+	Token      string   `mapstructure:"token"      validate:"required"`
 	Interval   int      `mapstructure:"repeat"`
 }
 
@@ -127,7 +127,8 @@ func checkConfig(iface config) {
 				parsedError = fmt.Sprintf("has to be %s", err.ActualTag())
 			}
 
-			Log.WithField("component", "CONFIG").Errorf("%s %s and has to be %s.\n", err.Field(), parsedError, err.Type())
+			Log.WithField("component", "CONFIG").
+				Errorf("%s %s and has to be %s.\n", err.Field(), parsedError, err.Type())
 		}
 
 		os.Exit(127)
