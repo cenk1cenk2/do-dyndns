@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/cenk1cenk2/do-dyndns/compare/v2.1.7...v2.2.0) (2022-04-19)
+
+
+### Features
+
+* update logger and dependencies ([3bcd750](https://github.com/cenk1cenk2/do-dyndns/commit/3bcd750d38d552ba7624189e447c388b216dc6bd))
+
 ## [2.1.7](https://github.com/cenk1cenk2/do-dyndns/compare/v2.1.6...v2.1.7) (2022-04-18)
 
 
