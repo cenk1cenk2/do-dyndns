@@ -1,3 +1,11 @@
+## [2.2.3](https://github.com/cenk1cenk2/do-dyndns/compare/v2.2.2...v2.2.3) (2022-04-19)
+
+
+### Bug Fixes
+
+* include tags file ([356f351](https://github.com/cenk1cenk2/do-dyndns/commit/356f35153e6a0be4e4cc59bae0eccf718b580795))
+* update versioning convention ([fac54b3](https://github.com/cenk1cenk2/do-dyndns/commit/fac54b3cc5b2d8ad06748b85fec2bcb6231233f8))
+
 ## [2.2.2](https://github.com/cenk1cenk2/do-dyndns/compare/v2.2.1...v2.2.2) (2022-04-19)
 
 
