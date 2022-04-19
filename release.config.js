@@ -11,7 +11,7 @@ module.exports = {
           {
             files: ["version/v.go"],
             from: 'var Version string = "(.*)"',
-            to: 'var Version string = "${nextRelease.version}"',
+            to: 'var Version string = "v${nextRelease.version}"',
             // results: [
             //   {
             //     file: "version/v.go",
