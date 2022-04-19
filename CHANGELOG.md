@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/cenk1cenk2/do-dyndns/compare/v2.2.1...v2.2.2) (2022-04-19)
+
+
+### Bug Fixes
+
+* step order ([ddb78b0](https://github.com/cenk1cenk2/do-dyndns/commit/ddb78b0331312bb353508d88a7abc702fcce5b29))
+
 ## [2.2.1](https://github.com/cenk1cenk2/do-dyndns/compare/v2.2.0...v2.2.1) (2022-04-19)
 
 
