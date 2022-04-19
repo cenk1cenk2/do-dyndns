@@ -39,6 +39,7 @@ semantic-release:
   artifacts:
     paths:
       - version/v.go
+      - .tags
 
 build-docker-image:
   only:
