@@ -1,7 +1,7 @@
 stages:
   - install
-  - publish
   - build
+  - publish
   - docker
   - post
 
@@ -34,12 +34,6 @@ include:
   - project: devops/pipes
     file: /templates/update-docker-hub-readme.gitlab-ci.yml
     ref: main
-
-semantic-release:
-  artifacts:
-    paths:
-      - version/v.go
-      - .tags
 
 build-docker-image:
   only:
