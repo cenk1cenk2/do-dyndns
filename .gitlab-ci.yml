@@ -1,7 +1,7 @@
 stages:
   - install
-  - build
   - publish
+  - build
   - docker
   - post
 
@@ -35,7 +35,7 @@ include:
     file: /templates/update-docker-hub-readme.gitlab-ci.yml
     ref: main
 
-build:
+semantic-release:
   artifacts:
     paths:
       - version/v.go
