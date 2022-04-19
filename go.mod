@@ -9,5 +9,5 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.11.0
-	gitlab.kilic.dev/libraries/go-utils v0.0.0-20220418190943-c8b57846b92d
+	gitlab.kilic.dev/libraries/go-utils v0.0.0-20220418234922-8aa1054eb76f
 )

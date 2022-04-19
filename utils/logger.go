@@ -19,6 +19,7 @@ func InitiateLogger() {
 
 	Log.SetFormatter(&formatter.Formatter{
 		FieldsOrder: []string{"component", "action", "category"},
+		HideKeys:    true,
 	})
 
 	// set log level
